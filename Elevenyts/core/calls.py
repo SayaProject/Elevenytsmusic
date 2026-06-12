@@ -244,19 +244,10 @@ class TgCall(PyTgCalls):
                 return
             raise
 
-        # Configure audio stream with optimized buffering for lag-free playback
-        # PERFORMANCE FIX: Increased buffers prevent stuttering/lagging during playback
         if seek_time > 1:
-            # Seeking: Still need buffers but skip to position first
-            ffmpeg_params = f"-ss {seek_time} -probesize 10M -analyzeduration 5M -rtbufsize 5M -fflags +genpts+igndts"
+            ffmpeg_params = f"-ss {seek_time} -nostdin -vn -probesize 2M -analyzeduration 1M -fflags +genpts"
         else:
-            # Normal playback with aggressive buffering:
-            # - probesize 10M: Large input buffer (prevents underruns)
-            # - analyzeduration 5M: Analyze more data (better format detection)
-            # - rtbufsize 5M: Real-time buffer (crucial for network streams)
-            # - fflags +genpts+igndts: Generate PTS, ignore DTS (smooth playback)
-            # - sync ext: External sync (reduces A/V desync)
-            ffmpeg_params = "-probesize 10M -analyzeduration 5M -rtbufsize 5M -fflags +genpts+igndts -sync ext"
+            ffmpeg_params = "-nostdin -vn -probesize 2M -analyzeduration 1M -fflags +genpts"
 
         is_video = getattr(media, "video", False)
         video_flags = (
@@ -267,7 +258,7 @@ class TgCall(PyTgCalls):
 
         stream = types.MediaStream(
             media_path=media.file_path,
-            audio_parameters=types.AudioQuality.STUDIO,
+            audio_parameters=types.AudioQuality.MEDIUM,
             audio_flags=types.MediaStream.Flags.REQUIRED,
             video_flags=video_flags,
             ffmpeg_parameters=ffmpeg_params,
@@ -381,8 +372,9 @@ class TgCall(PyTgCalls):
                     media.message_id = sent_photo.id
 
                 try:
-                    asyncio.create_task(
-                        preload.start_preload(chat_id, count=2))
+                    if config.PRELOAD_COUNT > 0:
+                        asyncio.create_task(
+                            preload.start_preload(chat_id, count=config.PRELOAD_COUNT))
                 except Exception as e:
                     logger.debug(f"Error starting preload for {chat_id}: {e}")
         except FileNotFoundError:
@@ -670,8 +662,9 @@ class TgCall(PyTgCalls):
                     await self.play_media(chat_id, None, media, message_chat_id=message_chat_id)
 
                 try:
-                    asyncio.create_task(
-                        preload.start_preload(chat_id, count=2))
+                    if config.PRELOAD_COUNT > 0:
+                        asyncio.create_task(
+                            preload.start_preload(chat_id, count=config.PRELOAD_COUNT))
                 except Exception as e:
                     logger.debug(
                         f"Error starting preload after play_next for {chat_id}: {e}")

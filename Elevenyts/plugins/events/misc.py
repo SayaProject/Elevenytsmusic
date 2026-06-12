@@ -164,7 +164,7 @@ async def update_timer(length=10):
                 # Pre-download next song if needed (don't block timer update)
                 if remaining <= 30:
                     next = queue.get_next(chat_id, check=True)
-                    if next and not next.file_path:
+                    if config.PRELOAD_COUNT > 0 and next and not next.file_path:
                         asyncio.create_task(_preload_next(chat_id, next))
 
                 if remaining < 10:

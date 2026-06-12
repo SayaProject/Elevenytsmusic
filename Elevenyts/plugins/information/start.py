@@ -69,7 +69,7 @@ async def start(_, message: types.Message):
         return
 
     # Check if user is blacklisted
-    if message.from_user.id in app.bl_users and message.from_user.id not in db.notified:
+    if message.from_user.id in db.blacklisted and message.from_user.id not in db.notified:
         return await message.reply_text(message.lang["bl_user_notify"])
 
     # If /start help, show help menu

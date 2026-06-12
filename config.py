@@ -55,6 +55,7 @@ class Config:
         self.THUMB_GEN: bool = self._str_to_bool(getenv("THUMB_GEN", "True"))
         self.VIDEO_PLAY: bool = self._str_to_bool(getenv("VIDEO_PLAY", "True"))
         self.VIDEO_MAX_HEIGHT: int = self._parse_video_height()
+        self.PRELOAD_COUNT: int = max(0, int(getenv("PRELOAD_COUNT", "0")))
 
         # NexGenBots / ArtistBots API
         self.API_URL: str = getenv("API_URL", getenv("ARTISTBOTS_API_URL", "https://pvtz.nexgenbots.xyz"))

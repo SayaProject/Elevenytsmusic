@@ -326,7 +326,8 @@ async def play_hndlr(
             # ✨ NEW: Start preloading queued tracks in background
             try:
                 from Elevenyts import preload
-                asyncio.create_task(preload.start_preload(chat_id, count=2))
+                if config.PRELOAD_COUNT > 0:
+                    asyncio.create_task(preload.start_preload(chat_id, count=config.PRELOAD_COUNT))
             except Exception:
                 # Non-critical, continue without preload
                 pass
