@@ -1,9 +1,5 @@
-<div align="center">
-  <img src="https://files.catbox.moe/zlmv6v.png" alt="˹ᴀʀᴛɪꜱᴛ ᴍᴜꜱɪᴄ˼" width="400"/>
-  
-  # 🎵 ˹ᴀʀᴛɪꜱᴛ ᴍᴜꜱɪᴄ˼
 
-
+ 
 ## ✨ Features
 
 - 🎵 **High Quality Music Streaming** - Crystal clear audio with STUDIO quality
@@ -28,7 +24,5 @@
 <div align="center">
   
   ### Made with ❤️ by sayaproject 
-  
-  **© 2026 ˹ᴀʀᴛɪꜱᴛ ᴍᴜꜱɪᴄ˼. All rights reserved.**
-  
+
 </div>
